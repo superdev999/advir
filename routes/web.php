@@ -18,7 +18,7 @@ Route::get('/blog', function () {
 Route::get('/thank', 'MainController@showThankPage');
 
 Route::get('/home', function () {
-    return Redirect::to('/dashboard');
+    return Redirect::to('/');
 });
 
 //-----------  Authentication management -----------------//
@@ -52,5 +52,7 @@ Route::group(['middleware' => ['emailverify']], function () {
 });
 
 Route::get('/', 'MainController@showLandingPage');
+Route::get('/advir/admin', 'AdvirAdminController@index');
+Route::post('/upload', 'UploadTestController@UploadImages');
 
 

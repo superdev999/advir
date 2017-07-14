@@ -21,8 +21,6 @@
 
 require __DIR__.'/../bootstrap/autoload.php';
 
-require __DIR__.'/../includes/aws.phar';
-
 /*
 |--------------------------------------------------------------------------
 | Turn On The Lights

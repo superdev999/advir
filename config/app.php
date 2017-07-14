@@ -177,11 +177,10 @@ return [
         App\Providers\EventServiceProvider::class,
         Jrean\UserVerification\UserVerificationServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
         Laracasts\Flash\FlashServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
-        
         Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
+        Aws\Laravel\AwsServiceProvider::class,
     ],
 
     /*
@@ -229,12 +228,10 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
         'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-
-        
         'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class,
+        'AWS' => Aws\Laravel\AwsFacade::class,
     ],
 
 ];

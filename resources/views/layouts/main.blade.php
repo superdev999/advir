@@ -121,8 +121,8 @@
                                 <ul class="nav navbar-nav navbar-right">
                                     <!-- submenu start -->
                                     @if (Auth::check())
-                                        <li class="<?php if ($page == "home") echo 'active'; ?>"><a
-                                                    href="{{ url('/dashboard') }}">Home</a>
+                                        <li class="<?php if ($page == "admin") echo 'active'; ?>"><a
+                                                    href="{{ url('/advir/admin') }}">Admin</a>
                                         </li>
                                     @else
                                         <li class="<?php if ($page == "home") echo 'active'; ?>"><a

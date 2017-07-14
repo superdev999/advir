@@ -2,7 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Aws\Laravel\AwsServiceProvider;
+use Illuminate\Support\Facades\App;
 use Aws\S3\S3Client;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Config;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,6 +21,7 @@ use Aws\S3\S3Client;
 
 //Include functions.php
 require base_path('includes/functions.php');
+//require base_path('includes/aws-sdk/aws-autoloader.php');
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -36,11 +42,13 @@ Route::get('/availableObjects', function (Request $request) {
 })->middleware('auth:api');
 
 Route::get('/availableContent', function (Request $request) {
+
+    $input = Input::all();
+    $scene = $input['scene'];
     $user = $request->user();
     $documentDir = isset($user['name']) ? '/'.$user['name'] : "";
+
     if($documentDir == "/guest") {
-        $input = Input::all();
-        $scene = $input['scene'];
         if($scene == "guest_scene_1") {
             $documentDir = "/guest";
         } else if($scene == "guest_scene_2") {
@@ -48,17 +56,19 @@ Route::get('/availableContent', function (Request $request) {
         }
     }
     $fileReadDir = "./public/uploads" . $documentDir;
-    $bucket = "advir-admin";
-    $keyname = "AKIAJ6ZG7IVLXHIVYIFQ";
 
-    // Instantiate the client.
-    $s3 = S3Client::factory();
-    $result = $s3->getObject(array(
-        'Bucket' => $bucket,
-        'Key'    => $keyname
-    ));
+    $bucket = Config::get('filesystems.disks.s3.bucket');
+    $region = Config::get('filesystems.disks.s3.region');
 
-    return $result;
+    $files = Storage::disk('s3')->allFiles($fileReadDir);
+    $prep = 'https://s3.'.$region.'.amazonaws.com/'.$bucket.'/';
+    $index = 0;
+    $url = null;
+    foreach($files as $object)
+    {
+        $url[$index++] = $prep.$object;
+    }
+    return response()->json($url);
 })->middleware('auth:api');
 
 Route::post('/Unity/advir_isActive', function (Request $request) {
@@ -177,6 +187,5 @@ Route::post('/Unity/advir_media', function (Request $request) {
 // API routes
 Route::group(['namespace' => 'Api'], function () {
     // Token not required
-    Route::post('auth/
-    ', 'AuthController@postAuthenticate');
+    Route::post('/auth/authenticate', 'AuthController@postAuthenticate');
 });
